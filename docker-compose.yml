@@ -1,0 +1,78 @@
+version: '3'
+
+services:
+  shared_mysql:
+    container_name: recursos-mysql
+    image: mysql:9
+    platform: linux/amd64
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    entrypoint:
+      sh -c "
+        echo 'CREATE DATABASE IF NOT EXISTS platform;CREATE DATABASE IF NOT EXISTS backoffice;' > /docker-entrypoint-initdb.d/init.sql;
+        /usr/local/bin/docker-entrypoint.sh --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+      "
+    command: ["--default-authentication-plugin=mysql_native_password"]
+
+  shared_rabbitmq:
+    container_name: recursos-rabbitmq
+    image: 'rabbitmq:3.13-management'
+    platform: linux/amd64
+    restart: unless-stopped
+    ports:
+      - "5630:5672"
+      - "8090:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=recursos
+      - RABBITMQ_DEFAULT_PASS=recursos
+
+  backoffice_elasticsearch:
+    container_name: recursos-elasticsearch
+    image: 'elasticsearch:6.8.4'
+    platform: linux/amd64
+    restart: unless-stopped
+    ports:
+      - "9300:9300"
+      - "9200:9200"
+    environment:
+      - discovery.type=single-node
+
+
+  platform_backend_server_java:
+    container_name: recursos_platform_backend_server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8030:8030"
+    volumes:
+      - .:/app:delegated
+      - platform_backend_gradle_cache:/app/.gradle
+    depends_on:
+      - shared_mysql
+      - shared_rabbitmq
+      - backoffice_elasticsearch
+    command: ["./gradlew", "bootRun", "--args", "platform_backend server"]
+
+  test_server_java:
+    container_name: recursos-test_server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - .:/app:delegated
+      - test_gradle_cache:/app/.gradle
+    depends_on:
+      - shared_mysql
+      - shared_rabbitmq
+      - backoffice_elasticsearch
+    tty: true
+
+volumes:
+  platform_backend_gradle_cache:
+  test_gradle_cache:

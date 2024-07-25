@@ -1,0 +1,9 @@
+rootProject.name = 'demo'
+
+include ':shared'
+project(':shared').projectDir = new File('src/shared')
+
+
+include ':platform'
+project(':platform').projectDir = new File('src/platform')
+
