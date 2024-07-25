@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import com.recursos.platform.steps.StepsModuleInfrastructureTestCase;
 import com.recursos.platform.steps.domain.Step;
 import com.recursos.platform.steps.domain.StepIdMother;
-import com.recursos.platform.steps.domain.challenge.ChallengeStepMother;
+import com.recursos.platform.steps.domain.document.DocumentStepMother;
 import com.recursos.platform.steps.domain.video.VideoStepMother;
 
 import jakarta.transaction.Transactional;
@@ -39,6 +39,6 @@ class MySqlStepRepositoryShould extends StepsModuleInfrastructureTestCase {
     }
 
     private List<? extends Step> generate_random_steps() {
-        return Arrays.asList(ChallengeStepMother.random(), VideoStepMother.random());
+        return Arrays.asList(DocumentStepMother.random(), VideoStepMother.random());
     }
 }

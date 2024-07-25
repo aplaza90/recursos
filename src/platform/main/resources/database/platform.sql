@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS steps (
 	DEFAULT CHARSET = utf8mb4
 	COLLATE = utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS steps_challenges (
+CREATE TABLE IF NOT EXISTS steps_documents (
 	id CHAR(36) NOT NULL,
 	statement TEXT NOT NULL,
 	PRIMARY KEY (id),

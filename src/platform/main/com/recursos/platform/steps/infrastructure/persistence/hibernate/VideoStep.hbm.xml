@@ -13,10 +13,10 @@
             <property name="value" column="title" type="string" access="field" />
         </component>
 
-        <joined-subclass name="com.recursos.platform.steps.domain.challenge.ChallengeStep" table="steps_challenges">
+        <joined-subclass name="com.recursos.platform.steps.domain.document.DocumentStep" table="steps_documents">
             <key column="id" />
 
-            <component name="statement" class="com.recursos.platform.steps.domain.challenge.ChallengeStepStatement"
+            <component name="statement" class="com.recursos.platform.steps.domain.document.DocumentStepStatement"
                        access="field">
                 <property name="value" column="statement" type="string" access="field" />
             </component>

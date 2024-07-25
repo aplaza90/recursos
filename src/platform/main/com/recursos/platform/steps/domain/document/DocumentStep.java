@@ -1,4 +1,4 @@
-package com.recursos.platform.steps.domain.challenge;
+package com.recursos.platform.steps.domain.document;
 
 import com.recursos.platform.steps.domain.Step;
 import com.recursos.platform.steps.domain.StepId;
@@ -6,16 +6,16 @@ import com.recursos.platform.steps.domain.StepTitle;
 
 import java.util.Objects;
 
-public final class ChallengeStep extends Step {
-    private final ChallengeStepStatement statement;
+public final class DocumentStep extends Step {
+    private final DocumentStepStatement statement;
 
-    public ChallengeStep(StepId id, StepTitle title, ChallengeStepStatement statement) {
+    public DocumentStep(StepId id, StepTitle title, DocumentStepStatement statement) {
         super(id, title);
 
         this.statement = statement;
     }
 
-    private ChallengeStep() {
+    private DocumentStep() {
         super(null, null);
 
         this.statement = null;
@@ -32,7 +32,7 @@ public final class ChallengeStep extends Step {
         if (!super.equals(o)) {
             return false;
         }
-        ChallengeStep that = (ChallengeStep) o;
+        DocumentStep that = (DocumentStep) o;
         return statement.equals(that.statement);
     }
 
