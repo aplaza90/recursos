@@ -13,6 +13,7 @@ import com.recursos.shared.domain.bus.command.CommandBus;
 import com.recursos.shared.domain.bus.query.QueryBus;
 import com.recursos.shared.infrastructure.spring.ApiController;
 
+
 @RestController
 public final class HealthCheckGetController extends ApiController {
 
@@ -28,7 +29,7 @@ public final class HealthCheckGetController extends ApiController {
 		status.put("application", "platform_backend");
 		status.put("status", "ok");
 
-		logger.info("This is a test log info message");
+		logger.warn("This is a test log info message");
 
 		return status;
 	}
@@ -37,4 +38,5 @@ public final class HealthCheckGetController extends ApiController {
 	public HashMap<Class<? extends DomainError>, HttpStatus> errorMapping() {
 		return null;
 	}
+
 }
