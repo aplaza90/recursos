@@ -29,16 +29,41 @@ services:
       - RABBITMQ_DEFAULT_USER=recursos
       - RABBITMQ_DEFAULT_PASS=recursos
 
-  backoffice_elasticsearch:
+  elasticsearch:
     container_name: recursos-elasticsearch
-    image: 'elasticsearch:6.8.4'
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.0
     platform: linux/amd64
     restart: unless-stopped
     ports:
       - "9300:9300"
       - "9200:9200"
     environment:
-      - discovery.type=single-node
+      - "ELASTIC_PASSWORD=recursos"
+      - "bootstrap.memory_lock=true"
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - "discovery.type=single-node"
+      - "TAKE_FILE_OWNERSHIP=1"
+
+  platform_logstash:
+    image: docker.elastic.co/logstash/logstash:7.5.0
+    container_name: logstash
+    environment:
+      - "ELASTIC_PASSWORD=recursos"
+    ports: [ '9600:9600' ]
+    depends_on:
+      - elasticsearch
+    volumes:
+      - './etc/logstash/pipeline:/usr/share/logstash/pipeline'
+      - './var/log:/logs'
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.5.0
+    container_name: kibana
+    environment:
+      - "ELASTIC_PASSWORD=elastic"
+    ports: [ '5601:5601' ]
+    depends_on:
+      - elasticsearch
 
 
   platform_backend_server_java:
@@ -55,7 +80,7 @@ services:
     depends_on:
       - shared_mysql
       - shared_rabbitmq
-      - backoffice_elasticsearch
+      - elasticsearch
     command: ["./gradlew", "bootRun", "--args", "platform_backend server"]
 
   test_server_java:
@@ -70,7 +95,7 @@ services:
     depends_on:
       - shared_mysql
       - shared_rabbitmq
-      - backoffice_elasticsearch
+      - elasticsearch
     tty: true
 
 volumes:
