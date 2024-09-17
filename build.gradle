@@ -31,7 +31,7 @@ allprojects {
 
 	ext {
 		set('springCloudVersion', "Hoxton.M3")
-		set('elasticsearchVersion', '6.8.4')
+		set('elasticsearchVersion', '7.5.0')
 	}
 
 	dependencies {
